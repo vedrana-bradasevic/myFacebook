@@ -1,0 +1,102 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, sans-serif;
+    background-image: url('../img/Untitled-1.png');
+    background-size:cover;
+    position:absolute;z-index:0;left:0;top:0;width:100%;height:100%
+  
+}
+#logo{
+    float:left;
+}
+#logo h1{
+    font-size:20px;
+    padding: 0;
+    margin: 0;
+    color:lightblue;
+    margin-left:20px;
+}
+#login_container{
+    float: right;
+}
+#navbar{
+    margin: 0 auto;
+    padding-top: 15px;
+    width: 980px;
+    height: 80px;
+    color:white;
+}
+#register_form{
+    float: right;
+    width: 45%;
+}
+#aside_l{
+    float: left;
+}
+#aside_l h1{
+    padding-top: 150px;
+    padding-left: 150px;
+    font-size:35px;
+    color: #182D45;
+}
+#submit_btn{
+    border: none;
+    margin-top:20px;
+    padding: 10px;
+    width: 185px;
+    border:1px solid #bdc7d8;
+    border-radius: 1em;
+}
+
+.full_width{
+   width:400px;
+}
+#signup_form input{
+    padding: 10px;
+    border:none;
+    border:1px solid #bdc7d8;
+    border-radius: 1em;
+}
+#lastname{
+    margin-left: -212px;
+    width: 185px;
+}
+#firstname{
+    width: 185px;
+}
+.login_input{
+    height: 25px;
+    border: 1px solid aliceblue;
+    border-radius: 10em;
+    padding-left: 10px;
+}
+input:focus{
+    outline-offset: 0;
+}
+input:-webkit-autofill{
+    box-shadow: 0 0 0 30px white inset;
+    -webkit-box-shadow: 0 0 0 30px white inset;
+}
+:focus{
+    outline:0;
+}
+#login_btn, #signup_btn{
+    background: #1A4C8B;
+    height: 30px;
+    width: 70px;
+    color: white;
+    border: 1px solid #1A4C8B;
+    border-radius: 10em;
+    cursor: pointer;
+    font-weight: bold;
+}
+#signup_btn{
+    margin-top:20px;
+    height: 40px;
+    width: 150px;
+}
+
+#login-error{
+    color:rgba(194, 28, 28, 0.938);
+}

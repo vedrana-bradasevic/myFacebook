@@ -1,0 +1,30 @@
+#topnav {
+    overflow: hidden;
+    margin-top:20px;
+    margin-bottom: 20px;
+  }
+  
+
+ #topnav a {
+    float: left;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    height: 10px;
+    border-left: 1px solid gray;
+  }
+  #gallery{
+    border-right: 1px solid #9ca09c;
+    height: 10px;
+  }
+  #topnav a:hover {
+    background-color: #ddd;
+  }
+  #topnav a:visited{
+    color:black;
+  }
+  #timeline{
+    color:blue;
+    cursor: pointer;
+  }
