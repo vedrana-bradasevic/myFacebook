@@ -147,11 +147,14 @@ function createStatuses(statuses, users) {
 
         let statusUsers = document.createElement('div');
         let statusUsersImg = document.createElement('img');
-        let imageName;
-        // kreiram IME i prezime usera
+        
+        // Creating users name and linking it to profile in statuses
         let usersName = document.createElement('div');
         usersName.setAttribute('class', 'users_name');
-        statusUsers.appendChild(usersName);
+        let usernameProfileLink = document.createElement('a');
+        usernameProfileLink.setAttribute('href', 'profile.html?user_id=' + status.user_id);
+        statusUsers.appendChild(usernameProfileLink);
+        usernameProfileLink.appendChild(usersName);
         // delete X
         let x = document.createElement('i');
         x.setAttribute('class', 'fa fa-times');
@@ -161,10 +164,11 @@ function createStatuses(statuses, users) {
         x.onclick = deleteStatus;
 
 
-        //Adding name to user that posts status
+        //Adding name to the user
         let statusUser = users[status.user_id];
         let name = statusUser.firstName + " " + statusUser.lastName;
         usersName.innerHTML = name;
+        let imageName;
         imageName = statusUser.image;
 
         if (!imageName) {
@@ -173,10 +177,11 @@ function createStatuses(statuses, users) {
         statusUsersImg.src = "img/" + imageName;
         statusUsers.setAttribute('class', 'status_users');
         statusUsersImg.setAttribute('class', 'status_users_image')
-        let profileLink = document.createElement('a');
-        profileLink.setAttribute('href', 'profile.html?user_id=' + status.user_id);
-        statusUsers.appendChild(profileLink);
-        profileLink.appendChild(statusUsersImg);
+        let imgProfileLink = document.createElement('a');
+        imgProfileLink.setAttribute('href', 'profile.html?user_id=' + status.user_id);
+  
+        statusUsers.appendChild(imgProfileLink);
+        imgProfileLink.appendChild(statusUsersImg);
         statusSection.appendChild(statusUsers);
 
 
@@ -197,6 +202,9 @@ function createStatuses(statuses, users) {
             img.setAttribute("class", 'statusImage');
             imgDiv.appendChild(img);
             statusSection.appendChild(imgDiv);
+            img.onclick = (ev) => {
+                activateModal(ev, status)
+            }
         }
 
         //Comment section 
@@ -221,13 +229,16 @@ function createStatuses(statuses, users) {
             let commentUserName = document.createElement('div');
             let commentUserNameText = document.createTextNode(users[statusComments[i].user_id].firstName + " " + users[statusComments[i].user_id].lastName);
             commentUserName.setAttribute('class','comment_user_name');
+            let commentUserNameLink = document.createElement('a');
+            commentUserNameLink.setAttribute('href', 'profile.html?user_id=' + users[statusComments[i].user_id].id);
             commentsProfileImg.setAttribute('href', 'profile.html?user_id=' + users[statusComments[i].user_id].id);
             commentsUserImg.setAttribute('src', 'img/' + users[statusComments[i].user_id].image);
             commentsUserImg.setAttribute('class', 'comments_user_img');
             commentDiv.setAttribute('class','old_comments_div')
 
             commentsProfileImg.appendChild(commentsUserImg);
-            commentUserName.appendChild(commentUserNameText);
+            commentUserName.appendChild(commentUserNameLink);
+            commentUserNameLink.appendChild(commentUserNameText);
             commentSpan.appendChild(commentText);
             commentDiv.appendChild(commentsProfileImg);
             commentTextContent.appendChild(commentUserName);
@@ -368,4 +379,104 @@ function getDateTime() {
 // Return current timestamp as numeric record
 function getTimestamp() {
     return new Date().getTime();
+}
+
+
+/**
+ * This function activates new window with selected image and comments.
+ * @param {*} ev 
+ * @param {*} status 
+ * 
+ */
+function activateModal(ev, status) {
+    let comment_Container = document.getElementById('comment_container');
+    let newcommentInput = document.getElementById('new_comment');
+    let newcommentInputlength = newcommentInput.children.length;
+    let commentLength = comment_Container.children.length;
+
+    // This for loops remove html content from parent, so it don't duplicate when selected again.
+    for (let i = 0; i < commentLength; i++) {
+        comment_Container.removeChild(comment_Container.children[0]);
+    }
+    for (let y = 0; y < newcommentInputlength; y++) {
+        newcommentInput.removeChild(newcommentInput.children[0]);
+    }
+
+    // Renders html for status in modal window
+    let user_id = getParameterByName('user_id');
+    let modalImage = document.getElementById('modal_image');
+    modalImage.setAttribute('src', ev.target.getAttribute('src'));
+    let modal = document.getElementById('myModal');
+    modal.style.display = "block";
+    let statusUserImgLink = document.createElement('a');
+    statusUserImgLink.setAttribute('href', 'profile.html?user_id=' + users[user_id].id);
+    let statusUserImg = document.getElementById('users_image');
+    statusUserImg.setAttribute('src', "img/" + users[status.user_id].image);
+    statusUserImgLink.appendChild(statusUserImg);
+    let statusProfileImage = document.getElementById('status_profile_image');
+    statusProfileImage.appendChild(statusUserImgLink);
+    document.getElementById('name_div_link').setAttribute('href','profile.html?user_id=' + users[user_id].id);
+    let name = document.getElementById('nameDiv');
+    name.innerHTML = users[status.user_id].firstName + " " + users[status.user_id].lastName;
+    let statusContentDiv = document.getElementById('status');
+    statusContentDiv.innerHTML = status.status;
+
+    // Renders html for comments in modal window
+    comments.forEach(function (comment) {
+        if (status.id == comment.status_id) {
+            let commentContainer = document.getElementById('comment_container');
+            let commentTextCont = document.createElement('div');
+            commentTextCont.setAttribute('class', 'comment_text_cont')
+            let commentContent = document.createElement('div');
+            commentContent.setAttribute('class', 'comment_content')
+            let innertext = document.createElement('div');
+            innertext.innerHTML = comment.comment;
+            let commentUserDivLink = document.createElement('a');
+            commentUserDivLink.setAttribute('href','profile.html?user_id=' + users[comment.user_id].id);
+            let commentUserDiv = document.createElement('div');
+            commentUserDiv.setAttribute('class', 'name');
+            commentUserDivLink.appendChild(commentUserDiv);
+            let commentUserName = document.createTextNode(users[comment.user_id].firstName);
+            commentUserDiv.appendChild(commentUserName);
+            let commentUserImageLink = document.createElement('a');
+            commentUserImageLink.setAttribute('href', 'profile.html?user_id=' + users[comment.user_id].id);
+            let commentUserImage = document.createElement('img');
+            commentUserImage.setAttribute('src', 'img/' + users[comment.user_id].image);
+            commentUserImage.setAttribute('class', 'comment_users_img');
+
+            commentUserImageLink.appendChild(commentUserImage);
+            commentContent.appendChild(commentUserImageLink);
+            commentTextCont.appendChild(commentUserDivLink);
+            commentTextCont.appendChild(innertext);
+            commentContent.appendChild(commentTextCont);
+            commentContainer.appendChild(commentContent);
+        }
+    });
+
+
+    // Renders html for enetering new comment in modal window
+    let userId = localStorage.getItem('userId');
+    let input = document.getElementById('new_comment');
+    let newComment = document.createElement('div');
+    let commentInput = document.createElement('input');
+    let commentInputProfileImg = document.createElement('a');
+    commentInputProfileImg.setAttribute('href', 'profile.html?user_id=' + users[userId].id);
+    newComment.setAttribute('class', 'new_comment');
+    commentInput.setAttribute('class', 'comment_input input')
+    commentInput.setAttribute('placeholder', 'Comment...');
+    let commentImg = document.createElement('img');
+    commentImg.setAttribute('src', 'img/' + users[userId].image);
+    commentImg.setAttribute('class', 'comment_users_img');
+    commentInputProfileImg.appendChild(commentImg);
+    newComment.appendChild(commentInputProfileImg);
+    newComment.appendChild(commentInput);
+    input.appendChild(newComment);
+
+    commentInput.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+            addComment(this, user_id);
+        }
+    });
+
 }

@@ -308,11 +308,11 @@ function activateModal(ev, status) {
     for (let i = 0; i < commentLength; i++) {
         comment_Container.removeChild(comment_Container.children[0]);
     }
-     for (let y = 0; y < newcommentInputlength; y++) {
-            newcommentInput.removeChild(newcommentInput.children[0]);
-        }
-    
-        // Renders html for status in modal window
+    for (let y = 0; y < newcommentInputlength; y++) {
+        newcommentInput.removeChild(newcommentInput.children[0]);
+    }
+
+    // Renders html for status in modal window
     let user_id = getParameterByName('user_id');
     let modalImage = document.getElementById('modal_image');
     modalImage.setAttribute('src', ev.target.getAttribute('src'));
@@ -325,12 +325,13 @@ function activateModal(ev, status) {
     statusUserImgLink.appendChild(statusUserImg);
     let statusProfileImage = document.getElementById('status_profile_image');
     statusProfileImage.appendChild(statusUserImgLink);
+    document.getElementById('name_div_link').setAttribute('href','profile.html?user_id=' + users[user_id].id);
     let name = document.getElementById('nameDiv');
     name.innerHTML = users[status.user_id].firstName + " " + users[status.user_id].lastName;
     let statusContentDiv = document.getElementById('status');
     statusContentDiv.innerHTML = status.status;
 
-        // Renders html for comments in modal window
+    // Renders html for comments in modal window
     comments.forEach(function (comment) {
         if (status.id == comment.status_id) {
             let commentContainer = document.getElementById('comment_container');
@@ -340,15 +341,22 @@ function activateModal(ev, status) {
             commentContent.setAttribute('class', 'comment_content')
             let innertext = document.createElement('div');
             innertext.innerHTML = comment.comment;
+            let commentUserDivLink = document.createElement('a');
+            commentUserDivLink.setAttribute('href','profile.html?user_id=' + users[comment.user_id].id);
             let commentUserDiv = document.createElement('div');
             commentUserDiv.setAttribute('class', 'name');
+            commentUserDivLink.appendChild(commentUserDiv);
             let commentUserName = document.createTextNode(users[comment.user_id].firstName);
             commentUserDiv.appendChild(commentUserName);
+            let commentUserImageLink = document.createElement('a');
+            commentUserImageLink.setAttribute('href', 'profile.html?user_id=' + users[comment.user_id].id);
             let commentUserImage = document.createElement('img');
             commentUserImage.setAttribute('src', 'img/' + users[comment.user_id].image);
             commentUserImage.setAttribute('class', 'comment_users_img');
-            commentContent.appendChild(commentUserImage);
-            commentTextCont.appendChild(commentUserDiv);
+
+            commentUserImageLink.appendChild(commentUserImage);
+            commentContent.appendChild(commentUserImageLink);
+            commentTextCont.appendChild(commentUserDivLink);
             commentTextCont.appendChild(innertext);
             commentContent.appendChild(commentTextCont);
             commentContainer.appendChild(commentContent);
